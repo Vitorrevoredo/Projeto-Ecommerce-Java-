@@ -38,5 +38,4 @@ public class Administrador extends Entidade {
         this.senha = senha;
     }
 
-    // Outros métodos específicos para Administrador podem ser definidos aqui
 }
