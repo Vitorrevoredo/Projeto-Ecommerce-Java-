@@ -52,9 +52,9 @@ public class Main {
                     }
                     // Após o login, entra no menu correspondente ao tipo de usuário
                     if (usuarioLogado instanceof model.Administrador) {
-                        menuAdministrador(menuService, scanner, produtoView, administradorView, clienteView);
+                        menuAdministrador(menuService, scanner, produtoView, administradorView, clienteView, usuarioLogado);
                     } else if (usuarioLogado instanceof model.Cliente) {
-                        menuCliente(menuService, scanner, carrinhoView, produtoController);
+                        menuCliente(menuService, scanner, carrinhoView, produtoController, usuarioLogado);
                     }
                     break;
                 case 2:
@@ -107,14 +107,14 @@ public class Main {
 
     // Menu para Administradores
     private static void menuAdministrador(MenuService menuService, Scanner scanner, ProdutoView produtoView,
-                                          AdministradorView administradorView, ClienteView clienteView) {
+                                          AdministradorView administradorView, ClienteView clienteView, Object usuarioLogado) {
         while (true) {
             int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Gestão de Produtos",
                     "Gestão de Administradores",
                     "Gestão de Clientes",
                     "Carrinho de Compras",
-                    "Voltar ao menu anterior"
+                    "Deslogar"
             });
 
             switch (opcao) {
@@ -131,7 +131,8 @@ public class Main {
                     System.out.println("Carrinho não disponível para administradores.");
                     break;
                 case 5:
-                    System.out.println("Saindo do menu administrador...");
+                    System.out.println("Deslogando...");
+                    usuarioLogado = null; // Desloga o usuário
                     return;  // Retorna ao menu principal após sair do menu do administrador
                 default:
                     System.out.println("Opção inválida.");
@@ -141,12 +142,12 @@ public class Main {
 
     // Menu para Clientes
     private static void menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView,
-                                    ProdutoController produtoController) {
+                                    ProdutoController produtoController, Object usuarioLogado) {
         while (true) {
             int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Visualizar Produtos",
                     "Carrinho de Compras",
-                    "Voltar ao menu anterior"
+                    "Deslogar"
             });
 
             switch (opcao) {
@@ -159,7 +160,8 @@ public class Main {
                     carrinhoView.menuCarrinho();
                     break;
                 case 3:
-                    System.out.println("Saindo do menu cliente...");
+                    System.out.println("Deslogando...");
+                    usuarioLogado = null; // Desloga o usuário
                     return;  // Retorna ao menu principal após sair do menu do cliente
                 default:
                     System.out.println("Opção inválida.");
