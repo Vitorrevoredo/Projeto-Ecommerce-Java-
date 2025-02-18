@@ -28,20 +28,45 @@ public class ProdutoController implements ICrud<Produto> {
 
     @Override
     public void atualizar(int id, Produto produtoAtualizado) {
-        for (Produto produto : produtos) {
-            if (produto.getId() == id) {
-                produto.setEstoque(produtoAtualizado.getEstoque());
-                System.out.println("Produto atualizado com sucesso!");
-                return;
+        try {
+            boolean produtoEncontrado = false;
+            for (Produto produto : produtos) {
+                if (produto.getId() == id) {
+                    produto.setEstoque(produtoAtualizado.getEstoque());
+                    produtoEncontrado = true;
+                    System.out.println("Produto atualizado com sucesso!");
+                    break;
+                }
             }
+            if (!produtoEncontrado) {
+                throw new IllegalArgumentException("Erro: Produto não encontrado.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println("Produto não encontrado.");
     }
 
     @Override
     public void remover(int id) {
-        produtos.removeIf(produto -> produto.getId() == id);
-        System.out.println("Produto removido com sucesso!");
+        try {
+            boolean produtoEncontrado = false;
+            for (Produto produto : produtos) {
+                if (produto.getId() == id) {
+                    produtos.remove(produto);
+                    produtoEncontrado = true;
+                    System.out.println("Produto removido com sucesso!");
+                    break;
+                }
+            }
+            if (!produtoEncontrado) {
+                throw new IllegalArgumentException("Erro: Produto não encontrado.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 
     @Override
