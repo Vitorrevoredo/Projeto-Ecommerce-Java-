@@ -1,4 +1,4 @@
-package exception;
+package service;
 
 import model.Produto;
 import java.util.List;

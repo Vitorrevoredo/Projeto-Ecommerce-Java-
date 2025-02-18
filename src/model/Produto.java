@@ -4,8 +4,8 @@ public class Produto extends Entidade {
     private String nome;
     private double preco;
     private int estoque;
-    private String descricao;  // Nova variável para descrição do produto
-    private String categoria;  // Nova variável para categoria do produto
+    private String descricao;
+    private String categoria;
 
     // Construtor
     public Produto(int id, String nome, double preco, int estoque, String descricao, String categoria) {

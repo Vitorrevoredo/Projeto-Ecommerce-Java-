@@ -6,9 +6,9 @@ import view.AdministradorView;
 import view.ClienteView;
 import controller.AdministradorController;
 import controller.ClienteController;
-import exception.AutenticacaoException;
-import exception.MenuException;
-import exception.ProdutosPadroesService;
+import service.AutenticacaoService;
+import service.MenuService;
+import service.ProdutosPadroesService;
 import controller.ProdutoController;
 
 import java.util.Scanner;
@@ -24,8 +24,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         // Criando serviços para centralizar a lógica de autenticação e menu
-        AutenticacaoException autenticacaoException = new AutenticacaoException(administradorController, clienteController);
-        MenuException menuException = new MenuException();
+        AutenticacaoService autenticacaoService = new AutenticacaoService(administradorController, clienteController);
+        MenuService menuService = new MenuService();
         ProdutoController produtoController = new ProdutoController();  // Instancia o ProdutoController
 
         // Criando o serviço de produto e adicionando produtos padrão
@@ -38,7 +38,7 @@ public class Main {
         // Menu de Login e Cadastro Inicial
         while (true) { // Continuar no menu principal até o usuário escolher sair
             System.out.println("\n--- E-commerce Gacessórios ---");
-            int opcao = menuException.obterOpcaoMenu(scanner, new String[] {
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Fazer Login",
                     "Cadastrar Administrador (Primeiro Acesso)",
                     "Cadastrar Cliente",
@@ -47,15 +47,15 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    usuarioLogado = fazerLogin(scanner, autenticacaoException);
+                    usuarioLogado = fazerLogin(scanner, autenticacaoService);
                     if (usuarioLogado == null) {
                         break; // Volta ao menu inicial se o login falhar
                     }
                     // Após o login, entra no menu correspondente ao tipo de usuário
                     if (usuarioLogado instanceof model.Administrador) {
-                        menuAdministrador(menuException, scanner, produtoView, administradorView, clienteView, usuarioLogado);
+                        menuAdministrador(menuService, scanner, produtoView, administradorView, clienteView, usuarioLogado);
                     } else if (usuarioLogado instanceof model.Cliente) {
-                        menuCliente(menuException, scanner, carrinhoView, produtoController, usuarioLogado);
+                        menuCliente(menuService, scanner, carrinhoView, produtoController, usuarioLogado);
                     }
                     break;
                 case 2:
@@ -74,7 +74,7 @@ public class Main {
     }
 
     // Método para autenticar o usuário
-    private static Object fazerLogin(Scanner scanner, AutenticacaoException autenticacaoException) {
+    private static Object fazerLogin(Scanner scanner, AutenticacaoService autenticacaoService) {
         System.out.print("Email: ");
         String email = scanner.nextLine();
         System.out.print("Senha: ");
@@ -86,9 +86,9 @@ public class Main {
         }
 
         // Tentando autenticar o cliente
-        model.Cliente cliente = autenticacaoException.autenticarCliente(email, senha);
+        model.Cliente cliente = autenticacaoService.autenticarCliente(email, senha);
         // Tentando autenticar o administrador
-        model.Administrador administrador = autenticacaoException.autenticarAdministrador(email, senha);
+        model.Administrador administrador = autenticacaoService.autenticarAdministrador(email, senha);
 
         // Se o cliente for encontrado
         if (cliente != null) {
@@ -107,10 +107,10 @@ public class Main {
     }
 
     // Menu para Administradores
-    private static void menuAdministrador(MenuException menuException, Scanner scanner, ProdutoView produtoView,
+    private static void menuAdministrador(MenuService menuService, Scanner scanner, ProdutoView produtoView,
                                           AdministradorView administradorView, ClienteView clienteView, Object usuarioLogado) {
         while (true) {
-            int opcao = menuException.obterOpcaoMenu(scanner, new String[] {
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Gestão de Produtos",
                     "Gestão de Administradores",
                     "Gestão de Clientes",
@@ -143,10 +143,10 @@ public class Main {
 
     // Menu para os clientes
     // Menu para os clientes
-    private static void menuCliente(MenuException menuException, Scanner scanner, CarrinhoView carrinhoView,
+    private static void menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView,
                                     ProdutoController produtoController, Object usuarioLogado) {
         while (true) {
-            int opcao = menuException.obterOpcaoMenu(scanner, new String[] {
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Visualizar Produtos",
                     "Pesquisar Produto",
                     "Carrinho de Compras",

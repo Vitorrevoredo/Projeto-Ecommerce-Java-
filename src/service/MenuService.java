@@ -1,8 +1,8 @@
-package exception;
+package service;
 
 import java.util.Scanner;
 
-public class MenuException {
+public class MenuService {
 
     public int obterOpcaoMenu(Scanner scanner, String[] opcoes) {
         int opcao = -1;

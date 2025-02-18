@@ -1,16 +1,16 @@
-package exception;
+package service;
 
 import controller.AdministradorController;
 import controller.ClienteController;
 import model.Administrador;
 import model.Cliente;
 
-public class AutenticacaoException {
+public class AutenticacaoService {
 
     private AdministradorController administradorController;
     private ClienteController clienteController;
 
-    public AutenticacaoException(AdministradorController administradorController, ClienteController clienteController) {
+    public AutenticacaoService(AdministradorController administradorController, ClienteController clienteController) {
         this.administradorController = administradorController;
         this.clienteController = clienteController;
     }
