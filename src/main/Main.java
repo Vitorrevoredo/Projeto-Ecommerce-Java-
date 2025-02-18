@@ -37,8 +37,6 @@ public class Main {
                     "Sair"
             });
 
-            System.out.println("Opção selecionada: " + opcao);  // Debugging
-
             switch (opcao) {
                 case 1:
                     autenticado = fazerLogin(scanner, autenticacaoService);
