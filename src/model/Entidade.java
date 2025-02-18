@@ -1,10 +1,14 @@
 package model;
 
-// Classe abstrata para herança de atributos comuns
 public abstract class Entidade {
-    protected int id;
-    protected String nome;
+    private int id;
 
+    // Construtor que exige um argumento 'int'
+    public Entidade(int id) {
+        this.id = id;
+    }
+
+    // Getter e Setter para o id
     public int getId() {
         return id;
     }
@@ -12,13 +16,4 @@ public abstract class Entidade {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 }
-

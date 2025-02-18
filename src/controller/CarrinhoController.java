@@ -1,4 +1,5 @@
 package controller;
+
 import model.Carrinho;
 import model.Produto;
 import java.util.List;
@@ -6,8 +7,13 @@ import java.util.List;
 public class CarrinhoController {
     private Carrinho carrinho = new Carrinho();
 
-    public void adicionarAoCarrinho(Produto produto) {
-        carrinho.adicionarProduto(produto);
+    public void adicionarAoCarrinho(int idProduto) {
+        Produto produto = new ProdutoController().buscarPorId(idProduto);
+        if (produto != null) {
+            carrinho.adicionarProduto(produto);
+        } else {
+            System.out.println("Produto não encontrado.");
+        }
     }
 
     public void listarCarrinho() {
@@ -16,15 +22,5 @@ public class CarrinhoController {
 
     public void finalizarCompra() {
         carrinho.finalizarCompra();
-    }
-
-    public void adicionarProdutosAoCarrinho(List<Produto> produtosDisponiveis, int idProduto) {
-        for (Produto produto : produtosDisponiveis) {
-            if (produto.getId() == idProduto) {
-                adicionarAoCarrinho(produto);
-                return;
-            }
-        }
-        System.out.println("Produto não encontrado.");
     }
 }

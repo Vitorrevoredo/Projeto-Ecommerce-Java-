@@ -1,6 +1,7 @@
 package view;
 import controller.ClienteController;
 import model.Cliente;
+
 import java.util.Scanner;
 
 public class ClienteView {
@@ -18,7 +19,7 @@ public class ClienteView {
             System.out.println("5. Voltar ao Menu Principal");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir quebra de linha
+            scanner.nextLine();
 
             switch (opcao) {
                 case 1 -> cadastrarCliente();
@@ -32,6 +33,7 @@ public class ClienteView {
     }
 
     private void cadastrarCliente() {
+        int id = clienteController.obterProximoId();
         System.out.print("Nome: ");
         String nome = scanner.nextLine();
         System.out.print("Email: ");
@@ -39,14 +41,14 @@ public class ClienteView {
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
-        Cliente cliente = new Cliente(nome, email, senha);
+        Cliente cliente = new Cliente(id, nome, email, senha);
         clienteController.cadastrarCliente(cliente);
     }
 
     private void atualizarCliente() {
         System.out.print("ID do Cliente para atualização: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Consumir quebra de linha
+        scanner.nextLine();
         System.out.print("Novo Nome: ");
         String nome = scanner.nextLine();
         System.out.print("Novo Email: ");
@@ -60,7 +62,7 @@ public class ClienteView {
     private void removerCliente() {
         System.out.print("ID do Cliente para remoção: ");
         int id = scanner.nextInt();
-        scanner.nextLine(); // Consumir quebra de linha
+        scanner.nextLine();
         clienteController.removerCliente(id);
     }
 }

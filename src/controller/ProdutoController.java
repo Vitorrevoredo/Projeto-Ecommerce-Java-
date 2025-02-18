@@ -1,39 +1,35 @@
 package controller;
+
 import model.Produto;
 import model.ICrud;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoController implements ICrud<Produto> {
-    private List<Produto> produtos = new ArrayList<>();
+    private static List<Produto> produtos = new ArrayList<>();  // Lista global de produtos
 
-    // CRUD: Create
     @Override
     public void cadastrar(Produto produto) {
         produtos.add(produto);
         System.out.println("Produto cadastrado com sucesso!");
     }
 
-    // CRUD: Read
     @Override
     public void listar() {
         if (produtos.isEmpty()) {
-            System.out.println("Nenhum produto cadastrado.");
+            System.out.println("Não há produtos cadastrados.");
         } else {
             for (Produto produto : produtos) {
-                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Categoria: " + produto.getCategoria() + " | Preço: R$" + produto.getPreco() + " | Estoque: " + produto.getEstoque());
+                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
             }
         }
     }
 
-    // CRUD: Update
     @Override
     public void atualizar(int id, Produto produtoAtualizado) {
         for (Produto produto : produtos) {
             if (produto.getId() == id) {
-                produto.setNome(produtoAtualizado.getNome());
-                produto.setCategoria(produtoAtualizado.getCategoria());
-                produto.setPreco(produtoAtualizado.getPreco());
                 produto.setEstoque(produtoAtualizado.getEstoque());
                 System.out.println("Produto atualizado com sucesso!");
                 return;
@@ -42,15 +38,22 @@ public class ProdutoController implements ICrud<Produto> {
         System.out.println("Produto não encontrado.");
     }
 
-    // CRUD: Delete
     @Override
     public void remover(int id) {
         produtos.removeIf(produto -> produto.getId() == id);
         System.out.println("Produto removido com sucesso!");
     }
 
-    // Método para obter a lista de produtos
-    public List<Produto> getProdutos() {
-        return produtos;
+    @Override
+    public Produto buscarPorId(int id) {
+        for (Produto produto : produtos) {
+            if (produto.getId() == id) {
+                return produto;
+            }
+        }
+        return null;
+    }
+    public int obterProximoId() {
+        return produtos.size() + 1;  // ID é baseado no tamanho da lista
     }
 }

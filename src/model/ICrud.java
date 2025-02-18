@@ -1,9 +1,9 @@
 package model;
 
-// Interface para padronizar operações CRUD
 public interface ICrud<T> {
-    void cadastrar(T obj);
+    void cadastrar(T t);
     void listar();
-    void atualizar(int id, T obj);
+    void atualizar(int id, T t);
     void remover(int id);
+    T buscarPorId(int id);
 }

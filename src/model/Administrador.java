@@ -1,13 +1,13 @@
 package model;
 
-public class Cliente extends Entidade {
+public class Administrador extends Entidade {
     private String nome;
     private String email;
     private String senha;
 
-    // Construtor da classe Cliente
-    public Cliente(int id, String nome, String email, String senha) {
-        super(id);  // Chama o construtor da classe Entidade com o parâmetro id
+    // Construtor
+    public Administrador(int id, String nome, String email, String senha) {
+        super(id);  // Chamando o construtor da classe base Entidade
         this.nome = nome;
         this.email = email;
         this.senha = senha;
@@ -37,4 +37,6 @@ public class Cliente extends Entidade {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+    // Outros métodos específicos para Administrador podem ser definidos aqui
 }
