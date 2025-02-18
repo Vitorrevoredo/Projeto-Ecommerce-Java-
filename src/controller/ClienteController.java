@@ -46,13 +46,14 @@ public class ClienteController {
     }
 
     // Método de autenticação do cliente
-    public boolean autenticarCliente(String email, String senha) {
+    public Cliente autenticarCliente(String email, String senha) {
         for (Cliente cliente : clientes) {
             if (cliente.getEmail().equals(email) && cliente.getSenha().equals(senha)) {
-                return true;
+                clienteLogado = cliente;  // Define o cliente logado
+                return cliente;  // Retorna o cliente autenticado
             }
         }
-        return false;
+        return null;  // Retorna null caso o cliente não seja encontrado
     }
 
     // Verifica se um cliente está logado
