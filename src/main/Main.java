@@ -6,6 +6,8 @@ import view.ClienteView;
 import view.CarrinhoView;
 import controller.AdministradorController;
 import controller.ClienteController;
+import service.AutenticacaoService;
+import service.MenuService;
 import java.util.Scanner;
 
 public class Main {
@@ -17,123 +19,139 @@ public class Main {
         AdministradorController administradorController = new AdministradorController();
         ClienteController clienteController = new ClienteController();
         Scanner scanner = new Scanner(System.in);
+
+        // Criando serviços para centralizar a lógica de autenticação e menu
+        AutenticacaoService autenticacaoService = new AutenticacaoService(administradorController, clienteController);
+        MenuService menuService = new MenuService();
+
         boolean autenticado = false;
         boolean isAdmin = false;
 
         // Menu de Login e Cadastro Inicial
         do {
             System.out.println("\n--- E-commerce Gacessórios ---");
-            System.out.println("1. Fazer Login");
-            System.out.println("2. Cadastrar Administrador (Primeiro Acesso)");
-            System.out.println("3. Cadastrar Cliente");
-            System.out.println("4. Sair");
-            System.out.print("Escolha uma opção: ");
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir quebra de linha
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[]{
+                    "Fazer Login",
+                    "Cadastrar Administrador (Primeiro Acesso)",
+                    "Cadastrar Cliente",
+                    "Sair"
+            });
+
+            System.out.println("Opção selecionada: " + opcao);  // Debugging
 
             switch (opcao) {
-                case 1 -> {
-                    autenticado = fazerLogin(administradorController, clienteController);
-                    // Verificando se o login foi de administrador
+                case 1:
+                    autenticado = fazerLogin(scanner, autenticacaoService);
                     isAdmin = autenticado && administradorController.isAdminLogado();
-                }
-                case 2 -> cadastrarAdministradorInicial(administradorController);
-                case 3 -> cadastrarCliente(clienteController);
-                case 4 -> System.out.println("Saindo...");
-                default -> System.out.println("Opção inválida. Tente novamente.");
+                    break;
+                case 2:
+                    cadastrarAdministradorInicial(scanner, administradorController);
+                    break;
+                case 3:
+                    cadastrarCliente(scanner, clienteController);
+                    break;
+                case 4:
+                    System.out.println("Saindo...");
+                    return;  // Retorna e termina a execução do programa
+                default:
+                    System.out.println("Opção inválida.");
             }
-        } while (!autenticado);
+        } while (!autenticado);  // Continua até que o login seja bem-sucedido
 
         // Menu Principal
-        int opcao;
-        do {
-            System.out.println("\n--- E-commerce Gacessórios ---");
-            System.out.println("1. Gestão de Produtos");
-            System.out.println("2. Gestão de Administradores");
-            System.out.println("3. Gestão de Clientes");
-            System.out.println("4. Carrinho de Compras");
-            System.out.println("5. Sair");
-            System.out.print("Escolha uma opção: ");
-            opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir quebra de linha
+        while (true) {
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[]{
+                    "Gestão de Produtos",
+                    "Gestão de Administradores",
+                    "Gestão de Clientes",
+                    "Carrinho de Compras",
+                    "Sair"
+            });
+
+            System.out.println("Opção selecionada: " + opcao);  // Debugging
 
             switch (opcao) {
-                case 1 -> {
+                case 1:
                     if (isAdmin) {
-                        produtoView.menuProduto();  // Apenas administradores podem acessar
+                        produtoView.menuProduto();
                     } else {
-                        System.out.println("Acesso negado! Somente administradores podem acessar essa opção.");
+                        System.out.println("Acesso negado! Somente administradores.");
                     }
-                }
-                case 2 -> {
+                    break;
+                case 2:
                     if (isAdmin) {
-                        administradorView.menuAdministrador();  // Só admin pode gerenciar administradores
+                        administradorView.menuAdministrador();
                     } else {
-                        System.out.println("Acesso negado! Somente administradores podem acessar essa opção.");
+                        System.out.println("Acesso negado! Somente administradores.");
                     }
-                }
-                case 3 -> {
+                    break;
+                case 3:
                     if (isAdmin) {
-                        clienteView.menuCliente();  // Só admin pode gerenciar clientes
+                        clienteView.menuCliente();
                     } else {
-                        System.out.println("Acesso negado! Somente administradores podem acessar essa opção.");
+                        System.out.println("Acesso negado! Somente administradores.");
                     }
-                }
-                case 4 -> carrinhoView.menuCarrinho();  // Clientes e admins podem acessar o carrinho
-                case 5 -> System.out.println("Saindo...");
-                default -> System.out.println("Opção inválida. Tente novamente.");
+                    break;
+                case 4:
+                    carrinhoView.menuCarrinho();
+                    break;
+                case 5:
+                    System.out.println("Saindo...");
+                    return;  // Retorna e termina a execução do programa
+                default:
+                    System.out.println("Opção inválida.");
             }
-        } while (opcao != 5);
-
-        scanner.close();
-        System.out.println("Obrigado por utilizar o E-commerce Gacessórios!");
+        }
     }
 
-    // Método para cadastrar o primeiro administrador
-    private static void cadastrarAdministradorInicial(AdministradorController administradorController) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Nome do Administrador: ");
-        String nome = scanner.nextLine();
+    // Método para autenticar o usuário
+    private static boolean fazerLogin(Scanner scanner, AutenticacaoService autenticacaoService) {
         System.out.print("Email: ");
         String email = scanner.nextLine();
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
-        int id = administradorController.obterProximoId();
-        administradorController.cadastrarAdministrador(new model.Administrador(id, nome, email, senha));
+        boolean autenticado = false;
+        try {
+            autenticado = autenticacaoService.autenticarAdministrador(email, senha) || autenticacaoService.autenticarCliente(email, senha);
+        } catch (Exception e) {
+            System.out.println("Erro ao tentar autenticar: " + e.getMessage());
+        }
+
+        return autenticado;
     }
 
-    // Método para cadastrar cliente
-    private static void cadastrarCliente(ClienteController clienteController) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Nome do Cliente: ");
-        String nome = scanner.nextLine();
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-        System.out.print("Senha: ");
-        String senha = scanner.nextLine();
+    // Método para cadastrar um administrador inicial
+    private static void cadastrarAdministradorInicial(Scanner scanner, AdministradorController administradorController) {
+        try {
+            System.out.print("Nome do Administrador: ");
+            String nome = scanner.nextLine();
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+            System.out.print("Senha: ");
+            String senha = scanner.nextLine();
 
-        int id = clienteController.obterProximoId();
-        clienteController.cadastrarCliente(new model.Cliente(id, nome, email, senha));
+            int id = administradorController.obterProximoId();
+            administradorController.cadastrarAdministrador(new model.Administrador(id, nome, email, senha));
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar administrador: " + e.getMessage());
+        }
     }
 
-    // Método para fazer login como Administrador ou Cliente
-    private static boolean fazerLogin(AdministradorController administradorController, ClienteController clienteController) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-        System.out.print("Senha: ");
-        String senha = scanner.nextLine();
+    // Método para cadastrar um cliente
+    private static void cadastrarCliente(Scanner scanner, ClienteController clienteController) {
+        try {
+            System.out.print("Nome do Cliente: ");
+            String nome = scanner.nextLine();
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+            System.out.print("Senha: ");
+            String senha = scanner.nextLine();
 
-        if (administradorController.autenticarAdministrador(email, senha)) {
-            System.out.println("Login como Administrador bem-sucedido!");
-            return true;
-        } else if (clienteController.autenticarCliente(email, senha)) {
-            System.out.println("Login como Cliente bem-sucedido!");
-            return true;
-        } else {
-            System.out.println("Credenciais inválidas.");
-            return false;
+            int id = clienteController.obterProximoId();
+            clienteController.cadastrarCliente(new model.Cliente(id, nome, email, senha));
+        } catch (Exception e) {
+            System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
         }
     }
 }
