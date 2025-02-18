@@ -33,6 +33,8 @@ public class ProdutoController implements ICrud<Produto> {
             for (Produto produto : produtos) {
                 if (produto.getId() == id) {
                     produto.setEstoque(produtoAtualizado.getEstoque());
+                    produto.setDescricao(produtoAtualizado.getDescricao());
+                    produto.setCategoria(produtoAtualizado.getCategoria());
                     produtoEncontrado = true;
                     System.out.println("Produto atualizado com sucesso!");
                     break;
@@ -94,7 +96,9 @@ public class ProdutoController implements ICrud<Produto> {
         } else {
             System.out.println("\n--- Produtos Disponíveis ---");
             for (Produto produto : produtos) {
-                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() + " | Estoque: " + produto.getEstoque());
+                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() +
+                        " | Estoque: " + produto.getEstoque() + " | Descrição: " + produto.getDescricao() +
+                        " | Categoria: " + produto.getCategoria());
             }
         }
     }
