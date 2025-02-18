@@ -2,7 +2,6 @@ package controller;
 
 import model.Carrinho;
 import model.Produto;
-import java.util.List;
 
 public class CarrinhoController {
     private Carrinho carrinho = new Carrinho();
@@ -10,7 +9,12 @@ public class CarrinhoController {
     public void adicionarAoCarrinho(int idProduto) {
         Produto produto = new ProdutoController().buscarPorId(idProduto);
         if (produto != null) {
-            carrinho.adicionarProduto(produto);
+            if (produto.getEstoque() > 0) {
+                carrinho.adicionarProduto(produto);
+                produto.decrementarEstoque(); // Supondo que o Produto tenha esse método
+            } else {
+                System.out.println("Produto fora de estoque.");
+            }
         } else {
             System.out.println("Produto não encontrado.");
         }

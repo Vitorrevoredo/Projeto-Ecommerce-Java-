@@ -24,25 +24,22 @@ public class Main {
         AutenticacaoService autenticacaoService = new AutenticacaoService(administradorController, clienteController);
         MenuService menuService = new MenuService();
 
-        boolean autenticado = false;
-        boolean isAdmin = false;
+        // Variável para controle de login
+        Object usuarioLogado = null;
 
         // Menu de Login e Cadastro Inicial
-        do {
+        while (usuarioLogado == null) {
             System.out.println("\n--- E-commerce Gacessórios ---");
-            int opcao = menuService.obterOpcaoMenu(scanner, new String[]{
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Fazer Login",
                     "Cadastrar Administrador (Primeiro Acesso)",
                     "Cadastrar Cliente",
                     "Sair"
             });
 
-            System.out.println("Opção selecionada: " + opcao);  // Debugging
-
             switch (opcao) {
                 case 1:
-                    autenticado = fazerLogin(scanner, autenticacaoService);
-                    isAdmin = autenticado && administradorController.isAdminLogado();
+                    usuarioLogado = fazerLogin(scanner, autenticacaoService);
                     break;
                 case 2:
                     cadastrarAdministradorInicial(scanner, administradorController);
@@ -56,11 +53,53 @@ public class Main {
                 default:
                     System.out.println("Opção inválida.");
             }
-        } while (!autenticado);  // Continua até que o login seja bem-sucedido
+        }
 
-        // Menu Principal
+        // Menu Principal - Só aparece depois de um login bem-sucedido
+        if (usuarioLogado instanceof model.Administrador) {
+            menuAdministrador(menuService, scanner, produtoView, administradorView, clienteView);
+        } else if (usuarioLogado instanceof model.Cliente) {
+            menuCliente(menuService, scanner, carrinhoView);
+        }
+    }
+    // Método para autenticar o usuário
+    private static Object fazerLogin(Scanner scanner, AutenticacaoService autenticacaoService) {
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+        System.out.print("Senha: ");
+        String senha = scanner.nextLine();
+
+        if (email.isEmpty() || senha.isEmpty()) {
+            System.out.println("Email e senha não podem ser vazios.");
+            return null;
+        }
+
+        // Tentando autenticar o cliente
+        model.Cliente cliente = autenticacaoService.autenticarCliente(email, senha);
+        // Tentando autenticar o administrador
+        model.Administrador administrador = autenticacaoService.autenticarAdministrador(email, senha);
+
+        // Se o cliente for encontrado
+        if (cliente != null) {
+            System.out.println("Login como cliente bem-sucedido!");
+            return cliente; // Cliente logado
+        }
+        // Se o administrador for encontrado
+        else if (administrador != null) {
+            System.out.println("Login como administrador bem-sucedido!");
+            return administrador; // Administrador logado
+        } else {
+            // Se nenhum for encontrado
+            System.out.println("Email ou senha incorretos.");
+            return null; // Login falhou
+        }
+    }
+
+    // Menu para Administradores
+    private static void menuAdministrador(MenuService menuService, Scanner scanner, ProdutoView produtoView,
+                                          AdministradorView administradorView, ClienteView clienteView) {
         while (true) {
-            int opcao = menuService.obterOpcaoMenu(scanner, new String[]{
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Gestão de Produtos",
                     "Gestão de Administradores",
                     "Gestão de Clientes",
@@ -68,32 +107,18 @@ public class Main {
                     "Sair"
             });
 
-            System.out.println("Opção selecionada: " + opcao);  // Debugging
-
             switch (opcao) {
                 case 1:
-                    if (isAdmin) {
-                        produtoView.menuProduto();
-                    } else {
-                        System.out.println("Acesso negado! Somente administradores.");
-                    }
+                    produtoView.menuProduto();
                     break;
                 case 2:
-                    if (isAdmin) {
-                        administradorView.menuAdministrador();
-                    } else {
-                        System.out.println("Acesso negado! Somente administradores.");
-                    }
+                    administradorView.menuAdministrador();
                     break;
                 case 3:
-                    if (isAdmin) {
-                        clienteView.menuCliente();
-                    } else {
-                        System.out.println("Acesso negado! Somente administradores.");
-                    }
+                    clienteView.menuCliente();
                     break;
                 case 4:
-                    carrinhoView.menuCarrinho();
+                    System.out.println("Carrinho não disponível para administradores.");
                     break;
                 case 5:
                     System.out.println("Saindo...");
@@ -104,21 +129,30 @@ public class Main {
         }
     }
 
-    // Método para autenticar o usuário
-    private static boolean fazerLogin(Scanner scanner, AutenticacaoService autenticacaoService) {
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-        System.out.print("Senha: ");
-        String senha = scanner.nextLine();
+    // Menu para Clientes
+    private static void menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView) {
+        while (true) {
+            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
+                    "Visualizar Produtos",
+                    "Carrinho de Compras",
+                    "Sair"
+            });
 
-        boolean autenticado = false;
-        try {
-            autenticado = autenticacaoService.autenticarAdministrador(email, senha) || autenticacaoService.autenticarCliente(email, senha);
-        } catch (Exception e) {
-            System.out.println("Erro ao tentar autenticar: " + e.getMessage());
+            switch (opcao) {
+                case 1:
+                    System.out.println("Produtos disponíveis:");
+                    // Você pode chamar um método para listar produtos aqui
+                    break;
+                case 2:
+                    carrinhoView.menuCarrinho();
+                    break;
+                case 3:
+                    System.out.println("Saindo...");
+                    return;  // Retorna e termina a execução do programa
+                default:
+                    System.out.println("Opção inválida.");
+            }
         }
-
-        return autenticado;
     }
 
     // Método para cadastrar um administrador inicial
@@ -133,6 +167,7 @@ public class Main {
 
             int id = administradorController.obterProximoId();
             administradorController.cadastrarAdministrador(new model.Administrador(id, nome, email, senha));
+            System.out.println("Administrador cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar administrador: " + e.getMessage());
         }
@@ -150,6 +185,7 @@ public class Main {
 
             int id = clienteController.obterProximoId();
             clienteController.cadastrarCliente(new model.Cliente(id, nome, email, senha));
+            System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
         }

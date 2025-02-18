@@ -2,7 +2,6 @@ package view;
 
 import controller.CarrinhoController;
 import controller.ProdutoController;
-import model.Produto;
 
 import java.util.Scanner;
 
@@ -40,6 +39,10 @@ public class CarrinhoView {
         int idProduto = scanner.nextInt();
         scanner.nextLine(); // Consumir quebra de linha
 
-        carrinhoController.adicionarAoCarrinho(idProduto);
+        if (produtoController.buscarPorId(idProduto) != null) {
+            carrinhoController.adicionarAoCarrinho(idProduto);
+        } else {
+            System.out.println("ID do produto inválido. Tente novamente.");
+        }
     }
 }

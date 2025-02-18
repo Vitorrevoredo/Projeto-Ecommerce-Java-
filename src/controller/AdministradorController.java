@@ -1,4 +1,5 @@
 package controller;
+
 import model.Administrador;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +63,13 @@ public class AdministradorController {
         return adminLogado != null;
     }
 
-
-
+    // Gera o próximo ID para cadastro
     public int obterProximoId() {
         return administradors.size() + 1;
+    }
+
+    // Obtém a lista de administradores
+    public List<Administrador> getAdministradores() {
+        return administradors;
     }
 }

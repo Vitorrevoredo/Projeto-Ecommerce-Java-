@@ -2,44 +2,33 @@ package service;
 
 import controller.AdministradorController;
 import controller.ClienteController;
+import model.Cliente;
+import model.Administrador;
 
 public class AutenticacaoService {
-
-    private AdministradorController administradorController;
-    private ClienteController clienteController;
+    private final AdministradorController administradorController;
+    private final ClienteController clienteController;
 
     public AutenticacaoService(AdministradorController administradorController, ClienteController clienteController) {
         this.administradorController = administradorController;
         this.clienteController = clienteController;
     }
 
-    public boolean autenticarAdministrador(String email, String senha) throws IllegalArgumentException {
-        try {
-            if (email == null || senha == null || email.isEmpty() || senha.isEmpty()) {
-                throw new IllegalArgumentException("Email e senha não podem ser vazios.");
+    public Cliente autenticarCliente(String email, String senha) {
+        for (Cliente cliente : clienteController.getClientes()) {
+            if (cliente.getEmail().equals(email) && cliente.getSenha().equals(senha)) {
+                return cliente;
             }
-            return administradorController.autenticarAdministrador(email, senha);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Erro de entrada: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.out.println("Erro inesperado ao autenticar o administrador: " + e.getMessage());
-            return false;
         }
+        return null;  // Cliente não encontrado
     }
 
-    public boolean autenticarCliente(String email, String senha) throws IllegalArgumentException {
-        try {
-            if (email == null || senha == null || email.isEmpty() || senha.isEmpty()) {
-                throw new IllegalArgumentException("Email e senha não podem ser vazios.");
+    public Administrador autenticarAdministrador(String email, String senha) {
+        for (Administrador administrador : administradorController.getAdministradores()) {
+            if (administrador.getEmail().equals(email) && administrador.getSenha().equals(senha)) {
+                return administrador;
             }
-            return clienteController.autenticarCliente(email, senha);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Erro de entrada: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.out.println("Erro inesperado ao autenticar o cliente: " + e.getMessage());
-            return false;
         }
+        return null;  // Administrador não encontrado
     }
 }

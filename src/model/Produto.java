@@ -5,6 +5,7 @@ public class Produto extends Entidade {
     private double preco;
     private int estoque;
 
+    // Construtor
     public Produto(int id, String nome, double preco, int estoque) {
         super(id);
         this.nome = nome;
@@ -12,6 +13,7 @@ public class Produto extends Entidade {
         this.estoque = estoque;
     }
 
+    // Getters
     public String getNome() {
         return nome;
     }
@@ -24,7 +26,17 @@ public class Produto extends Entidade {
         return estoque;
     }
 
+    // Setter para estoque
     public void setEstoque(int estoque) {
         this.estoque = estoque;
+    }
+
+    // Método para diminuir o estoque
+    public boolean decrementarEstoque() {
+        if (estoque > 0) {
+            estoque--;
+            return true;  // Estoque diminuído com sucesso
+        }
+        return false;  // Estoque insuficiente
     }
 }
