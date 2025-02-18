@@ -1,9 +1,9 @@
-package service;
+package exception;
 
 import model.Produto;
 import java.util.List;
 
-public class ProdutoService {
+public class ProdutosPadroesService {
 
     public void adicionarProdutosPadrao(List<Produto> produtos) {
         // Se a lista de produtos estiver vazia, adiciona os produtos padrão
