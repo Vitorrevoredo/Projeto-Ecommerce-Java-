@@ -1,15 +1,16 @@
 package main;
 
+import view.CarrinhoView;
 import view.ProdutoView;
 import view.AdministradorView;
 import view.ClienteView;
-import view.CarrinhoView;
 import controller.AdministradorController;
 import controller.ClienteController;
 import service.AutenticacaoService;
 import service.MenuService;
 import service.ProdutoService;
-import controller.ProdutoController;  // Importar o ProdutoController
+import controller.ProdutoController;
+
 import java.util.Scanner;
 
 public class Main {
@@ -140,12 +141,14 @@ public class Main {
         }
     }
 
-    // Menu para Clientes
+    // Menu para os clientes
+    // Menu para os clientes
     private static void menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView,
                                     ProdutoController produtoController, Object usuarioLogado) {
         while (true) {
             int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Visualizar Produtos",
+                    "Pesquisar Produto",
                     "Carrinho de Compras",
                     "Deslogar"
             });
@@ -153,20 +156,31 @@ public class Main {
             switch (opcao) {
                 case 1:
                     System.out.println("Produtos disponíveis:");
-                    // Exibindo a lista de produtos detalhada para o cliente
-                    produtoController.listarProdutosDetalhado();  // Chamada do método que exibe os produtos
+                    produtoController.listarProdutosDetalhado();
                     break;
                 case 2:
-                    carrinhoView.menuCarrinho();
+                    pesquisarProduto(scanner, produtoController);
                     break;
                 case 3:
+                    // A chamada para o menuCarrinho deve ser feita para o cliente com o carrinho atual
+                    carrinhoView.menuCarrinho(usuarioLogado);  // Enviar o usuário logado para o carrinho
+                    break;
+                case 4:
                     System.out.println("Deslogando...");
-                    usuarioLogado = null; // Desloga o usuário
-                    return;  // Retorna ao menu principal após sair do menu do cliente
+                    usuarioLogado = null;
+                    return;
                 default:
                     System.out.println("Opção inválida.");
             }
         }
+    }
+    // Método para pesquisar produto
+    private static void pesquisarProduto(Scanner scanner, ProdutoController produtoController) {
+        System.out.print("\nDigite o termo de pesquisa (nome, categoria ou descrição): ");
+        String termo = scanner.nextLine();
+
+        System.out.println("\n--- Resultados da Pesquisa ---");
+        produtoController.pesquisarProdutos(termo);
     }
 
     // Método para cadastrar um administrador inicial
@@ -181,6 +195,7 @@ public class Main {
 
             int id = administradorController.obterProximoId();
             administradorController.cadastrarAdministrador(new model.Administrador(id, nome, email, senha));
+            System.out.println("Administrador cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar administrador: " + e.getMessage());
         }
@@ -198,6 +213,7 @@ public class Main {
 
             int id = clienteController.obterProximoId();
             clienteController.cadastrarCliente(new model.Cliente(id, nome, email, senha));
+            System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
         }

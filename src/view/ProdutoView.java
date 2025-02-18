@@ -15,7 +15,8 @@ public class ProdutoView {
             System.out.println("\n--- Gestão de Produtos ---");
             System.out.println("1. Listar Produtos");
             System.out.println("2. Cadastrar Novo Produto");
-            System.out.println("3. Voltar ao Menu Principal");
+            System.out.println("3. Pesquisar Produto");
+            System.out.println("4. Voltar ao Menu Principal");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
             scanner.nextLine(); // Consumir quebra de linha
@@ -25,19 +26,23 @@ public class ProdutoView {
                     listarProdutos();
                     break;
                 case 2:
-                    cadastrarProduto();  // Chama o método para cadastrar um produto
+                    cadastrarProduto();
                     break;
                 case 3:
+                    pesquisarProduto();  // Chama o método para pesquisar produtos
+                    break;
+                case 4:
                     System.out.println("Voltando ao Menu Principal...");
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
             }
-        } while (opcao != 3);
+        } while (opcao != 4);
     }
 
     // Método para listar produtos
     private void listarProdutos() {
+        System.out.println("\n--- Listagem de Produtos ---");
         produtoController.listarProdutosDetalhado();
     }
 
@@ -62,5 +67,16 @@ public class ProdutoView {
 
         // Adiciona o produto ao controlador
         produtoController.cadastrar(novoProduto);
+        System.out.println("Produto cadastrado com sucesso!");
+    }
+
+    // Método para pesquisar produtos
+    private void pesquisarProduto() {
+        System.out.print("\nDigite o termo de pesquisa (nome, categoria ou descrição): ");
+        String termo = scanner.nextLine();
+
+        // Chama o método de pesquisa do ProdutoController
+        System.out.println("\n--- Resultados da Pesquisa ---");
+        produtoController.pesquisarProdutos(termo);
     }
 }

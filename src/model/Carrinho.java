@@ -7,6 +7,11 @@ import java.text.DecimalFormat;
 public class Carrinho {
     private List<ItemCarrinho> itens = new ArrayList<>();
 
+    // Método getter para a lista de itens
+    public List<ItemCarrinho> getItens() {
+        return itens;
+    }
+
     public void adicionarProduto(Produto produto) {
         for (ItemCarrinho item : itens) {
             if (item.getProduto().getId() == produto.getId()) {
@@ -31,16 +36,17 @@ public class Carrinho {
         }
     }
 
-    public void finalizarCompra() {
-        if (itens.isEmpty()) {
-            System.out.println("Carrinho vazio. Não é possível finalizar a compra.");
-        } else {
-            double total = itens.stream()
-                    .mapToDouble(item -> item.getProduto().getPreco() * item.getQuantidade())
-                    .sum();
-            System.out.println("\nCompra finalizada com sucesso!");
-            System.out.println("Total a pagar: R$" + total);
-            itens.clear(); // Limpar o carrinho após a compra
-        }
+    public double calcularTotal() {
+        return itens.stream()
+                .mapToDouble(item -> item.getProduto().getPreco() * item.getQuantidade())
+                .sum();
+    }
+
+    public void limparCarrinho() {
+        itens.clear(); // Limpar o carrinho após o pagamento
+    }
+
+    public boolean isCarrinhoVazio() {
+        return itens.isEmpty();
     }
 }

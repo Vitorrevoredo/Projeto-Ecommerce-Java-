@@ -33,8 +33,6 @@ public class ProdutoController implements ICrud<Produto> {
             for (Produto produto : produtos) {
                 if (produto.getId() == id) {
                     produto.setEstoque(produtoAtualizado.getEstoque());
-                    produto.setDescricao(produtoAtualizado.getDescricao());
-                    produto.setCategoria(produtoAtualizado.getCategoria());
                     produtoEncontrado = true;
                     System.out.println("Produto atualizado com sucesso!");
                     break;
@@ -96,10 +94,26 @@ public class ProdutoController implements ICrud<Produto> {
         } else {
             System.out.println("\n--- Produtos Disponíveis ---");
             for (Produto produto : produtos) {
-                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() +
-                        " | Estoque: " + produto.getEstoque() + " | Descrição: " + produto.getDescricao() +
-                        " | Categoria: " + produto.getCategoria());
+                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() + " | Estoque: " + produto.getEstoque());
             }
+        }
+    }
+
+    // Método para pesquisar produtos por nome, categoria ou descrição
+    public void pesquisarProdutos(String termo) {
+        boolean encontrouProduto = false;
+
+        for (Produto produto : produtos) {
+            if (produto.getNome().toLowerCase().contains(termo.toLowerCase()) ||
+                    produto.getCategoria().toLowerCase().contains(termo.toLowerCase()) ||
+                    produto.getDescricao().toLowerCase().contains(termo.toLowerCase())) {
+                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() + " | Estoque: " + produto.getEstoque() + " | Descrição: " + produto.getDescricao() + " | Categoria: " + produto.getCategoria());
+                encontrouProduto = true;
+            }
+        }
+
+        if (!encontrouProduto) {
+            System.out.println("Nenhum produto encontrado com o termo: " + termo);
         }
     }
 }
