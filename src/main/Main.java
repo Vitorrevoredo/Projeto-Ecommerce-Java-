@@ -8,6 +8,8 @@ import controller.AdministradorController;
 import controller.ClienteController;
 import service.AutenticacaoService;
 import service.MenuService;
+import service.ProdutoService;
+import controller.ProdutoController;  // Importar o ProdutoController
 import java.util.Scanner;
 
 public class Main {
@@ -23,6 +25,11 @@ public class Main {
         // Criando serviços para centralizar a lógica de autenticação e menu
         AutenticacaoService autenticacaoService = new AutenticacaoService(administradorController, clienteController);
         MenuService menuService = new MenuService();
+        ProdutoController produtoController = new ProdutoController();  // Instancia o ProdutoController
+
+        // Criando o serviço de produto e adicionando produtos padrão
+        ProdutoService produtoService = new ProdutoService();
+        produtoService.adicionarProdutosPadrao(produtoController.getProdutos());
 
         // Variável para controle de login
         Object usuarioLogado = null;
@@ -57,11 +64,20 @@ public class Main {
 
         // Menu Principal - Só aparece depois de um login bem-sucedido
         if (usuarioLogado instanceof model.Administrador) {
-            menuAdministrador(menuService, scanner, produtoView, administradorView, clienteView);
+            while (true) {
+                if (!menuAdministrador(menuService, scanner, produtoView, administradorView, clienteView)) {
+                    break; // Retorna ao menu principal se o administrador sair
+                }
+            }
         } else if (usuarioLogado instanceof model.Cliente) {
-            menuCliente(menuService, scanner, carrinhoView);
+            while (true) {
+                if (!menuCliente(menuService, scanner, carrinhoView, produtoController)) {
+                    break; // Retorna ao menu principal se o cliente sair
+                }
+            }
         }
     }
+
     // Método para autenticar o usuário
     private static Object fazerLogin(Scanner scanner, AutenticacaoService autenticacaoService) {
         System.out.print("Email: ");
@@ -96,63 +112,65 @@ public class Main {
     }
 
     // Menu para Administradores
-    private static void menuAdministrador(MenuService menuService, Scanner scanner, ProdutoView produtoView,
-                                          AdministradorView administradorView, ClienteView clienteView) {
-        while (true) {
-            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
-                    "Gestão de Produtos",
-                    "Gestão de Administradores",
-                    "Gestão de Clientes",
-                    "Carrinho de Compras",
-                    "Sair"
-            });
+    private static boolean menuAdministrador(MenuService menuService, Scanner scanner, ProdutoView produtoView,
+                                             AdministradorView administradorView, ClienteView clienteView) {
+        int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
+                "Gestão de Produtos",
+                "Gestão de Administradores",
+                "Gestão de Clientes",
+                "Carrinho de Compras",
+                "Sair"
+        });
 
-            switch (opcao) {
-                case 1:
-                    produtoView.menuProduto();
-                    break;
-                case 2:
-                    administradorView.menuAdministrador();
-                    break;
-                case 3:
-                    clienteView.menuCliente();
-                    break;
-                case 4:
-                    System.out.println("Carrinho não disponível para administradores.");
-                    break;
-                case 5:
-                    System.out.println("Saindo...");
-                    return;  // Retorna e termina a execução do programa
-                default:
-                    System.out.println("Opção inválida.");
-            }
+        switch (opcao) {
+            case 1:
+                produtoView.menuProduto();
+                break;
+            case 2:
+                administradorView.menuAdministrador();
+                break;
+            case 3:
+                clienteView.menuCliente();
+                break;
+            case 4:
+                System.out.println("Carrinho não disponível para administradores.");
+                break;
+            case 5:
+                System.out.println("Saindo...");
+                return false;  // Retorna false para sair do menu
+            default:
+                System.out.println("Opção inválida.");
         }
+
+        return true;  // Retorna true para continuar o menu
     }
 
     // Menu para Clientes
-    private static void menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView) {
-        while (true) {
-            int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
-                    "Visualizar Produtos",
-                    "Carrinho de Compras",
-                    "Sair"
-            });
+    private static boolean menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView,
+                                       ProdutoController produtoController) {
+        int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
+                "Visualizar Produtos",
+                "Carrinho de Compras",
+                "Sair"
+        });
 
-            switch (opcao) {
-                case 1:
-                    System.out.println("Produtos disponíveis:");
-                    // Você pode chamar um método para listar produtos aqui
-                    break;
-                case 2:
-                    carrinhoView.menuCarrinho();
-                    break;
-                case 3:
-                    System.out.println("Saindo...");
-                    return;  // Retorna e termina a execução do programa
-                default:
-                    System.out.println("Opção inválida.");
-            }
+        switch (opcao) {
+            case 1:
+                System.out.println("Produtos disponíveis:");
+                // Exibindo a lista de produtos detalhada para o cliente
+                produtoController.listarProdutosDetalhado();  // Chamada do método que exibe os produtos
+                break;
+            case 2:
+                carrinhoView.menuCarrinho();
+                break;
+            case 3:
+                System.out.println("Saindo...");
+                return false;  // Retorna false para sair do menu
+            default:
+                System.out.println("Opção inválida.");
         }
+
+        return true;  // Retorna true para continuar o menu
     }
 
     // Método para cadastrar um administrador inicial
@@ -167,7 +185,6 @@ public class Main {
 
             int id = administradorController.obterProximoId();
             administradorController.cadastrarAdministrador(new model.Administrador(id, nome, email, senha));
-            System.out.println("Administrador cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar administrador: " + e.getMessage());
         }
@@ -185,7 +202,6 @@ public class Main {
 
             int id = clienteController.obterProximoId();
             clienteController.cadastrarCliente(new model.Cliente(id, nome, email, senha));
-            System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
         }

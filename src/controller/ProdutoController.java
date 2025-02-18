@@ -65,10 +65,13 @@ public class ProdutoController implements ICrud<Produto> {
             System.out.println(e.getMessage());
         }
     }
+
+    // Método para retornar a lista de produtos
     public List<Produto> getProdutos() {
         return produtos;
     }
 
+    // Método para buscar um produto pelo ID
     @Override
     public Produto buscarPorId(int id) {
         for (Produto produto : produtos) {
@@ -78,7 +81,21 @@ public class ProdutoController implements ICrud<Produto> {
         }
         return null;
     }
+
+    // Método para obter o próximo ID
     public int obterProximoId() {
         return produtos.size() + 1;  // ID é baseado no tamanho da lista
+    }
+
+    // Método para listar os produtos com detalhes
+    public void listarProdutosDetalhado() {
+        if (produtos.isEmpty()) {
+            System.out.println("Não há produtos cadastrados.");
+        } else {
+            System.out.println("\n--- Produtos Disponíveis ---");
+            for (Produto produto : produtos) {
+                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() + " | Estoque: " + produto.getEstoque());
+            }
+        }
     }
 }

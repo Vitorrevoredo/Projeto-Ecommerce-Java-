@@ -4,13 +4,17 @@ public class Produto extends Entidade {
     private String nome;
     private double preco;
     private int estoque;
+    private String descricao;  // Nova variável para descrição do produto
+    private String categoria;  // Nova variável para categoria do produto
 
     // Construtor
-    public Produto(int id, String nome, double preco, int estoque) {
-        super(id);
+    public Produto(int id, String nome, double preco, int estoque, String descricao, String categoria) {
+        super(id);  // Chama o construtor da classe pai
         this.nome = nome;
         this.preco = preco;
         this.estoque = estoque;
+        this.descricao = descricao;
+        this.categoria = categoria;
     }
 
     // Getters
@@ -26,9 +30,33 @@ public class Produto extends Entidade {
         return estoque;
     }
 
-    // Setter para estoque
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    // Setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
     public void setEstoque(int estoque) {
         this.estoque = estoque;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     // Método para diminuir o estoque
