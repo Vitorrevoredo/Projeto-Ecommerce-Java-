@@ -21,7 +21,7 @@ public class ProdutoController implements ICrud<Produto> {
             System.out.println("Não há produtos cadastrados.");
         } else {
             for (Produto produto : produtos) {
-                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco());
+                System.out.println("ID: " + produto.getId() + " | Nome: " + produto.getNome() + " | Preço: R$" + produto.getPreco() + " | Estoque: " + produto.getEstoque());
             }
         }
     }
