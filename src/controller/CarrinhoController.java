@@ -57,7 +57,6 @@ public class CarrinhoController {
                 .mapToDouble(item -> item.getProduto().getPreco() * item.getQuantidade())
                 .sum();
 
-        System.out.println("Total calculado dentro do carrinho: R$" + total);  // Imprime o total calculado
         return total;
     }
 

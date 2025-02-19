@@ -6,7 +6,7 @@ import java.util.List;
 public class ProdutosPadroesService {
 
     public void adicionarProdutosPadrao(List<Produto> produtos) {
-        // Se a lista de produtos estiver vazia, adiciona os produtos padrão
+        // Produtos para simulação de vendas
         if (produtos.isEmpty()) {
             produtos.add(new Produto(1, "Cabo USB C 240W Essager", 80.00, 10, "Cabo USB C de 240W para carregamento rápido", "Cabos"));
             produtos.add(new Produto(2, "Cabo USB C Retrátil Baseus", 50.00, 20, "Cabo USB C retrátil da Baseus", "Cabos"));
@@ -27,7 +27,7 @@ public class ProdutosPadroesService {
             produtos.add(new Produto(13, "Fone com Fio Baseus HZ20", 15.00, 50, "Fone com fio Baseus modelo HZ20", "Fones"));
             produtos.add(new Produto(14, "Fone com Fio Baseus H17", 15.00, 50, "Fone com fio Baseus modelo H17", "Fones"));
 
-            System.out.println("Produtos padrão cadastrados com sucesso!");
+            System.out.println("Produtos padrões cadastrados com sucesso!");
         }
     }
 }
