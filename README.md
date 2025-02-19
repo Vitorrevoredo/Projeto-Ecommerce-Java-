@@ -1,6 +1,5 @@
 # E-commerce Gacessórios
-
-Bem-vindo ao projeto **E-commerce Gacessórios**, um sistema de e-commerce desenvolvido em **Java**. O sistema permite o cadastro e autenticação de administradores e clientes, além de gerenciamento de produtos e carrinho de compras.
+Sistema de e-commerce desenvolvido em **Java**. O sistema permite o cadastro e autenticação de administradores e clientes, além de gerenciamento de produtos e carrinho de compras.
 
 ## Funcionalidades
 
