@@ -10,10 +10,9 @@ Bem-vindo ao projeto **E-commerce Gacessórios**, um sistema de e-commerce desen
 - **Gestão de Produtos**: Administradores podem adicionar, editar e remover produtos da loja.
 - **Carrinho de Compras**: Clientes podem visualizar produtos e gerenciar o carrinho para realizar compras.
 
-## Tecnologias Utilizadas
+**💡 Objetivo:** O principal objetivo desse projeto foi aprofundar meus conhecimentos em Java, MVC, e design patterns enquanto criava uma aplicação prática e funcional para um sistema de e-commerce.
 
-- **Java 8+**: Linguagem principal utilizada no desenvolvimento.
-- **Banco de Dados**: Armazenamento simples de dados utilizando memória (não implementado um banco de dados persistente, mas pode ser integrado facilmente).
+**👨‍💻 Como foi feito:** Esse projeto me permitiu explorar conceitos importantes como autenticação de usuários, gestão de dados com controladores e exceções personalizadas, além de praticar boas práticas de organização de código.
 
 ## Estrutura do Projeto
 
