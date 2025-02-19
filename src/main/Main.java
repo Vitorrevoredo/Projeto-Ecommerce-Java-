@@ -40,8 +40,8 @@ public class Main {
             System.out.println("\n--- E-commerce Gacessórios ---");
             int opcao = menuService.obterOpcaoMenu(scanner, new String[] {
                     "Fazer Login",
-                    "Cadastrar Administrador (Primeiro Acesso)",
-                    "Cadastrar Cliente",
+                    "Cadastrar Administrador (Necessário para acesso ao Login)",
+                    "Cadastrar Cliente (Necessário para acesso ao Login)",
                     "Encerrar programa"
             });
 
@@ -142,7 +142,6 @@ public class Main {
     }
 
     // Menu para os clientes
-    // Menu para os clientes
     private static void menuCliente(MenuService menuService, Scanner scanner, CarrinhoView carrinhoView,
                                     ProdutoController produtoController, Object usuarioLogado) {
         while (true) {
@@ -195,7 +194,6 @@ public class Main {
 
             int id = administradorController.obterProximoId();
             administradorController.cadastrarAdministrador(new model.Administrador(id, nome, email, senha));
-            System.out.println("Administrador cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar administrador: " + e.getMessage());
         }
@@ -213,7 +211,6 @@ public class Main {
 
             int id = clienteController.obterProximoId();
             clienteController.cadastrarCliente(new model.Cliente(id, nome, email, senha));
-            System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
         }

@@ -2,6 +2,10 @@ package model;
 
 public class Pagamento {
 
+    public int getValor() {
+        return 0;
+    }
+
     // Enum para as formas de pagamento
     public enum FormaDePagamento {
         CARTAO_CREDITO,
