@@ -1,5 +1,3 @@
-package main;
-
 import view.CarrinhoView;
 import view.ProdutoView;
 import view.AdministradorView;
