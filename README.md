@@ -1,7 +1,4 @@
 # 🛒 E-commerce Gacessórios
-
-Este repositório contém o backend de um sistema de **e-commerce** desenvolvido em **Java**, com foco em estruturação de código limpa, aplicação de conceitos de orientação a objetos e arquitetura MVC.
-
 O projeto foi criado como exercício prático para aprofundar conhecimentos em Java, autenticação de usuários, controle de fluxo de dados e boas práticas no desenvolvimento de sistemas.
 
 ## 🚀 Funcionalidades
