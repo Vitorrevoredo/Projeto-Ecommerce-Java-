@@ -1,29 +1,51 @@
-# E-commerce Gacessórios
-Sistema de e-commerce desenvolvido em **Java**. O sistema permite o cadastro e autenticação de administradores e clientes, além de gerenciamento de produtos e carrinho de compras.
+# 🛒 E-commerce Gacessórios
 
-## Funcionalidades
+Este repositório contém o backend de um sistema de **e-commerce** desenvolvido em **Java**, com foco em estruturação de código limpa, aplicação de conceitos de orientação a objetos e arquitetura MVC.
 
-- **Cadastro de Administradores**: Permite cadastrar administradores com acesso ao sistema de gestão.
-- **Cadastro de Clientes**: Clientes podem se cadastrar e realizar login para acessar a loja online.
-- **Login e Autenticação**: Sistema de login para clientes e administradores, com validação de credenciais.
-- **Gestão de Produtos**: Administradores podem adicionar, editar e remover produtos da loja.
-- **Carrinho de Compras**: Clientes podem visualizar produtos e gerenciar o carrinho para realizar compras.
+O projeto foi criado como exercício prático para aprofundar conhecimentos em Java, autenticação de usuários, controle de fluxo de dados e boas práticas no desenvolvimento de sistemas.
 
-**💡 Objetivo:** O principal objetivo desse projeto foi aprofundar meus conhecimentos em Java, MVC, e design patterns enquanto criava uma aplicação prática e funcional para um sistema de e-commerce.
+## 🚀 Funcionalidades
 
-**👨‍💻 Como foi feito:** Esse projeto me permitiu explorar conceitos importantes como autenticação de usuários, gestão de dados com controladores e exceções personalizadas, além de praticar boas práticas de organização de código.
+- **Cadastro e Login de Administradores**: Gerenciamento completo com autenticação para acesso ao sistema administrativo.
+- **Cadastro e Login de Clientes**: Acesso à loja com funcionalidades exclusivas, como visualização e compra de produtos.
+- **Gestão de Produtos**: Adição, edição e exclusão de produtos pelo administrador.
+- **Carrinho de Compras**: Clientes podem adicionar/remover itens e visualizar o total da compra.
+- **Autenticação Segura**: Validação de credenciais com controle de acesso.
 
-## Estrutura do Projeto
+## 🎯 Objetivos do Projeto
+
+- Consolidar conhecimentos em **Java puro** e **orientação a objetos**.
+- Praticar os princípios de **MVC (Model-View-Controller)**.
+- Trabalhar com **design patterns** e modularização do código.
+- Simular um sistema funcional que pode ser expandido para web ou mobile no futuro.
+
+## 🛠️ Tecnologias e Conceitos Utilizados
+
+- Java (versão 11+)
+- Arquitetura MVC
+- Validações e exceções personalizadas
+- Manipulação de dados em memória
+- Organização modular de código
+
+## 📁 Estrutura do Projeto
 
 ```plaintext
 .
 ├── src
 │   ├── main
 │   │   ├── controller      # Controladores de lógica de negócios
-│   │   ├── exception      # Exceções customizadas
-│   │   ├── model          # Modelos de dados
-│   │   ├── service        # Serviços de lógica de autenticação, produtos, etc.
-│   │   ├── view           # Interfaces de visualização
-│   │   └── Main.java      # Ponto de entrada principal do aplicativo
-│   └── test               # Testes unitários
+│   │   ├── exception       # Exceções customizadas
+│   │   ├── model           # Modelos de dados (Clientes, Admins, Produtos)
+│   │   ├── service         # Regras de negócio: autenticação, carrinho, etc.
+│   │   ├── view            # Interfaces de interação com o usuário
+│   │   └── Main.java       # Ponto de entrada do sistema
+│   └── test               # Testes unitários (em desenvolvimento)
 └── README.md              # Este arquivo
+```
+
+## 💬 Considerações Finais
+
+Esse projeto me desafiou a pensar como um desenvolvedor backend, cuidando de fluxos de autenticação, gestão de dados e separação de responsabilidades. Foi uma excelente forma de aplicar Java de forma prática, simulando situações do mundo real.
+
+📌 *Em breve pretendo evoluí-lo para uma versão com persistência em banco de dados e interface web.*
+
